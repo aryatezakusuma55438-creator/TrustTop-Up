@@ -13,8 +13,8 @@
     <div style="display:flex;align-items:center;gap:12px;">
       <button class="nav-dots-btn" id="dotsBtn" onclick="toggleMenu()">⋮</button>
       <div class="dots-menu" id="dotsMenu">
-        <a href="{{ url_for('index') }}">🏠 Home</a>
-        <a href="{{ url_for('game') }}">🎮 Games</a>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('game') }}">Games</a>
       </div>
     </div>
     <div class="nav-logo">TrustTop Up</div>
@@ -54,10 +54,10 @@
     {% if order.snap_token %}
     <div style="margin-top:20px;">
       <button id="pay-button" class="btn-topup" style="width:100%;font-size:1.05rem;letter-spacing:1px;">
-        💳 BAYAR SEKARANG
+        BAYAR SEKARANG
       </button>
       <div style="text-align:center;margin-top:10px;font-size:0.8rem;color:rgba(255,255,255,0.35);">
-        Aman & terenkripsi oleh Midtrans 🔒
+        Aman & terenkripsi oleh Midtrans
       </div>
     </div>
     {% else %}
