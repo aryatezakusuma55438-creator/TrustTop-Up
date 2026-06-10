@@ -36,7 +36,7 @@
   </nav>
 
   <section class="section" style="padding-top:120px;">
-    <div class="section-title">⚙️ Admin <span>Dashboard</span></div>
+    <div class="section-title">Admin <span>Dashboard</span></div>
     <div class="section-sub">Kelola transaksi TrustTop Up</div>
 
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -48,27 +48,27 @@
     <!-- Stats -->
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-top:32px;">
       <div class="game-card stat-card">
-        <div style="font-size:1.8rem;margin-bottom:6px;">📋</div>
+        <div style="font-size:1.8rem;margin-bottom:6px;"></div>
         <div class="game-name">Total Order</div>
         <div style="font-family:'Orbitron',monospace;font-size:1.5rem;color:#a855f7;font-weight:700;">{{ stats.total_orders }}</div>
       </div>
       <div class="game-card stat-card">
-        <div style="font-size:1.8rem;margin-bottom:6px;">✅</div>
+        <div style="font-size:1.8rem;margin-bottom:6px;"></div>
         <div class="game-name">Sukses</div>
         <div style="font-family:'Orbitron',monospace;font-size:1.5rem;color:#4ade80;font-weight:700;">{{ stats.success }}</div>
       </div>
       <div class="game-card stat-card">
-        <div style="font-size:1.8rem;margin-bottom:6px;">⏳</div>
+        <div style="font-size:1.8rem;margin-bottom:6px;"></div>
         <div class="game-name">Pending</div>
         <div style="font-family:'Orbitron',monospace;font-size:1.5rem;color:#facc15;font-weight:700;">{{ stats.pending }}</div>
       </div>
       <div class="game-card stat-card">
-        <div style="font-size:1.8rem;margin-bottom:6px;">❌</div>
+        <div style="font-size:1.8rem;margin-bottom:6px;"></div>
         <div class="game-name">Gagal</div>
         <div style="font-family:'Orbitron',monospace;font-size:1.5rem;color:#f87171;font-weight:700;">{{ stats.failed }}</div>
       </div>
       <div class="game-card stat-card" style="border-color:rgba(245,158,11,0.4);">
-        <div style="font-size:1.8rem;margin-bottom:6px;">💰</div>
+        <div style="font-size:1.8rem;margin-bottom:6px;"></div>
         <div class="game-name">Revenue (Sukses)</div>
         <div style="font-family:'Orbitron',monospace;font-size:1rem;color:#f59e0b;font-weight:700;">{{ stats.revenue }}</div>
       </div>
@@ -77,16 +77,16 @@
     <!-- Orders Table -->
     <div style="margin-top:48px;">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
-        <div class="section-title" style="font-size:1.2rem;margin:0;">📦 Semua <span>Pesanan</span></div>
-        <input class="search-input" type="text" id="searchInput" placeholder="🔍 Cari game / user ID..." oninput="filterTable()">
+        <div class="section-title" style="font-size:1.2rem;margin:0;">Semua <span>Pesanan</span></div>
+        <input class="search-input" type="text" id="searchInput" placeholder="Cari game / user ID..." oninput="filterTable()">
       </div>
 
       <!-- Filter tabs -->
       <div class="admin-filter">
         <button class="filter-btn active" onclick="setFilter('all', this)">Semua</button>
-        <button class="filter-btn" onclick="setFilter('pending', this)">⏳ Pending</button>
-        <button class="filter-btn" onclick="setFilter('success', this)">✅ Sukses</button>
-        <button class="filter-btn" onclick="setFilter('failed', this)">❌ Gagal</button>
+        <button class="filter-btn" onclick="setFilter('pending', this)">Pending</button>
+        <button class="filter-btn" onclick="setFilter('success', this)">Sukses</button>
+        <button class="filter-btn" onclick="setFilter('failed', this)">Gagal</button>
       </div>
 
       <div style="overflow-x:auto;">
@@ -118,7 +118,7 @@
               <td style="padding:10px 12px;">
                 {% if order.whatsapp %}
                   <a class="wa-link" href="https://wa.me/{{ order.whatsapp | replace('0','62',1) }}?text=Halo%2C+pesanan+kamu+Order+%23{{ order.id }}+sudah+{{ order.status }}!" target="_blank">
-                    📲 {{ order.whatsapp }}
+                    {{ order.whatsapp }}
                   </a>
                 {% else %}
                   <span style="color:rgba(255,255,255,0.3);font-size:0.78rem;">-</span>
