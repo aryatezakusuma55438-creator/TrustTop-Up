@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>Games - TrustTop Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Orbitron:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div id="main-site" class="visible">
+  <nav>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="nav-dots-btn" id="dotsBtn" onclick="toggleMenu()">⋮</button>
+      <div class="dots-menu" id="dotsMenu">
+        <a href="{{ url_for('index') }}">🏠 Home</a>
+        <a href="#">⭐ Review</a>
+        <a href="#">📞 Contact</a>
+        <a href="#" class="donate-link" onclick="openDonate(event)">❤️ Donate</a>
+      </div>
+    </div>
+    <div class="nav-logo">TrustTop Up</div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('game') }}">Games</a></li>
+      <li><a href="#">Review</a></li>
+    </ul>
+  </nav>
+
+  <section class="section" style="padding-top:120px;" id="games-section">
+    <div class="section-title">Semua <span>Game</span></div>
+    <div class="section-sub">Pilih game favoritmu dan top up sekarang</div>
+    <div class="games-grid">
+      {% for game in games %}
+      <div class="game-card" onclick="openModal('{{ game.name }}')">
+        {% if game.badge %}<div class="popular-badge">{{ game.badge }}</div>{% endif %}
+        <img src="{{ url_for('static', filename='game/' + game.image) }}" alt="{{ game.name }}"
+             style="width:80px;height:80px;object-fit:cover;border-radius:12px;margin-bottom:12px;"
+             onerror="this.style.display='none'">
+        <div class="game-name">{{ game.name }}</div>
+        <div class="game-price">Mulai {{ game.price }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <footer>
+    <div style="font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;margin-bottom:8px;">TrustTop Up</div>
+    <div>Top up murah, cepat, dan terpercaya 🎮</div>
+    <div style="margin-top:8px;font-size:0.8rem;">© 2026 TrustTop Up. All rights reserved.</div>
+  </footer>
+</div>
+
+<!-- TOP UP MODAL -->
+<div class="modal-overlay" id="topup-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">Top Up 💎</div>
+    <div class="modal-game-name" id="modal-game-name"></div>
+
+    <label id="label-user-id">User ID</label>
+    <input type="text" id="user-id" placeholder="Masukkan User ID kamu"/>
+
+    <div id="server-id-wrapper">
+      <label id="label-server-id">Server ID</label>
+      <input type="text" id="server-id" placeholder="Masukkan Server ID"/>
+    </div>
+
+    <div id="server-select-wrapper" style="display:none;">
+      <label>Server</label>
+      <select id="server-select" style="width:100%;background:#0e0e1e;border:1px solid rgba(124,58,237,0.3);color:#fff;border-radius:10px;padding:10px 14px;font-size:0.95rem;">
+        <option value="Asia">Asia</option>
+        <option value="Europe">Europe</option>
+        <option value="America">America</option>
+        <option value="TW/HK/MO">TW/HK/MO</option>
+      </select>
+    </div>
+
+    <label>Pilih Jumlah</label>
+    <div class="diamond-amounts" id="diamond-amounts"></div>
+
+    <!-- Metode bayar dipilih di Midtrans popup, tidak perlu di sini -->
+    <div style="margin-top:12px;padding:12px 16px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:10px;font-size:0.82rem;color:rgba(255,255,255,0.5);text-align:center;">
+      💳 Metode pembayaran dipilih di halaman berikutnya<br>
+      <span style="color:#a855f7;">GoPay · OVO · Dana · QRIS · Transfer Bank · Alfamart</span>
+    </div>
+
+    <button class="btn-topup" style="margin-top:16px;" onclick="processTopup()">🚀 LANJUT PEMBAYARAN</button>
+  </div>
+</div>
+
+<!-- DONATE MODAL -->
+<div class="modal-overlay" id="donate-modal">
+  <div class="modal" style="text-align:center;">
+    <button class="modal-close" onclick="closeDonate()">✕</button>
+    <div style="font-size:3rem;margin-bottom:8px;">❤️</div>
+    <div class="modal-title">Donate</div>
+    <div style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-top:8px;line-height:1.7;">Donasi kamu sangat berarti! Terima kasih 🙏</div>
+    <div class="donate-code">Dana / GoPay / OVO<br><br>0812-3456-7890<br><span style="font-size:0.85rem;opacity:0.6;">a.n. TrustTop Up</span></div>
+    <button class="btn-primary" style="margin-top:20px;width:100%;border-radius:12px;" onclick="closeDonate()">Tutup</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

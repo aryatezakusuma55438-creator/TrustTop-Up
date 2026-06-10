@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Riwayat Transaksi - TrustTop Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Orbitron:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div id="main-site" class="visible">
+  <nav>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="nav-dots-btn" id="dotsBtn" onclick="toggleMenu()">⋮</button>
+      <div class="dots-menu" id="dotsMenu">
+        <a href="{{ url_for('index') }}"> Home</a>
+        <a href="{{ url_for('game') }}"> Games</a>
+        <a href="{{ url_for('admin') }}"> Admin Panel</a>
+        <a href="{{ url_for('logout') }}"> Logout</a>
+      </div>
+    </div>
+    <div class="nav-logo">TrustTop Up</div>
+  </nav>
+
+  <section class="section" style="padding-top:120px;">
+    <div class="section-title"> <span>Riwayat</span> Transaksi</div>
+    <div class="section-sub">Daftar transaksi top up (Admin Only)</div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div style="margin-top:16px;padding:12px 20px;border-radius:10px;
+            {% if category == 'error' %}background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);
+            {% else %}background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.3);{% endif %}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% if transactions %}
+    <div style="display:flex;flex-direction:column;gap:14px;margin-top:24px;">
+      {% for tx in transactions %}
+      <div class="game-card" style="text-align:left;cursor:default;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div class="game-name">{{ tx.game }}</div>
+          <div style="font-size:0.85rem;color:rgba(255,255,255,0.5);margin-top:4px;">
+            ID: {{ tx.user_id }} •  {{ tx.diamond }} • {{ tx.date }}
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="color:#f59e0b;font-family:'Orbitron',monospace;font-weight:700;font-size:0.95rem;">{{ tx.price }}</div>
+          <div style="font-size:0.75rem;margin-top:4px;padding:3px 10px;border-radius:20px;display:inline-block;
+            {% if tx.status == 'success' %}background:rgba(34,197,94,0.15);color:#4ade80;
+            {% elif tx.status == 'pending' %}background:rgba(234,179,8,0.15);color:#facc15;
+            {% else %}background:rgba(239,68,68,0.15);color:#f87171;{% endif %}">
+            {{ tx.status | upper }}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div style="text-align:center;margin-top:60px;color:rgba(255,255,255,0.4);">
+      <div style="font-size:3rem;margin-bottom:16px;"></div>
+      <div>Belum ada transaksi.</div>
+    </div>
+    {% endif %}
+  </section>
+</div>
+
+<script>
+function toggleMenu() {
+  document.getElementById('dotsMenu').classList.toggle('open');
+}
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('dotsMenu');
+  const btn = document.getElementById('dotsBtn');
+  if (!menu.contains(e.target) && e.target !== btn) menu.classList.remove('open');
+});
+</script>
+</body>
+</html>

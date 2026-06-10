@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - TrustTop Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Orbitron:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+  .admin-filter { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+  .filter-btn { background:rgba(124,58,237,0.15); border:1px solid rgba(124,58,237,0.3); color:#a855f7;
+    padding:6px 18px; border-radius:20px; cursor:pointer; font-family:'Rajdhani',sans-serif;
+    font-size:0.9rem; font-weight:600; transition:all 0.2s; }
+  .filter-btn.active, .filter-btn:hover { background:rgba(124,58,237,0.4); border-color:#a855f7; color:#fff; }
+  .wa-link { color:#4ade80; text-decoration:none; font-size:0.8rem; }
+  .wa-link:hover { text-decoration:underline; }
+  .flash-msg { padding:12px 20px; border-radius:10px; margin-bottom:16px; font-size:0.9rem;
+    background:rgba(74,222,128,0.15); border:1px solid rgba(74,222,128,0.3); color:#4ade80; }
+  .stat-card { cursor:default; }
+  .search-input { background:#0e0e1e; border:1px solid rgba(124,58,237,0.3); color:#fff;
+    border-radius:10px; padding:8px 16px; font-size:0.9rem; width:240px; outline:none;
+    font-family:'Nunito',sans-serif; }
+  .search-input:focus { border-color:#a855f7; }
+</style>
+</head>
+<body>
+<div id="main-site" class="visible">
+  <nav>
+    <div class="nav-logo">TrustTop Up — Admin</div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('admin') }}">Dashboard</a></li>
+      <li><a href="{{ url_for('riwayat') }}">Riwayat</a></li>
+      <li><a href="{{ url_for('index') }}" target="_blank">Lihat Site</a></li>
+      <li><a href="{{ url_for('logout') }}" style="color:#ef4444;">Logout</a></li>
+    </ul>
+  </nav>
+
+  <section class="section" style="padding-top:120px;">
+    <div class="section-title">⚙️ Admin <span>Dashboard</span></div>
+    <div class="section-sub">Kelola transaksi TrustTop Up</div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for cat, msg in messages %}
+        <div class="flash-msg" style="{% if cat == 'error' %}background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);color:#f87171;{% endif %}">{{ msg }}</div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- Stats -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;margin-top:32px;">
+      <div class="game-card stat-card">
+        <div style="font-size:1.8rem;margin-bottom:6px;">📋</div>
+        <div class="game-name">Total Order</div>
+        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;color:#a855f7;font-weight:700;">{{ stats.total_orders }}</div>
+      </div>
+      <div class="game-card stat-card">
+        <div style="font-size:1.8rem;margin-bottom:6px;">✅</div>
+        <div class="game-name">Sukses</div>
+        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;color:#4ade80;font-weight:700;">{{ stats.success }}</div>
+      </div>
+      <div class="game-card stat-card">
+        <div style="font-size:1.8rem;margin-bottom:6px;">⏳</div>
+        <div class="game-name">Pending</div>
+        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;color:#facc15;font-weight:700;">{{ stats.pending }}</div>
+      </div>
+      <div class="game-card stat-card">
+        <div style="font-size:1.8rem;margin-bottom:6px;">❌</div>
+        <div class="game-name">Gagal</div>
+        <div style="font-family:'Orbitron',monospace;font-size:1.5rem;color:#f87171;font-weight:700;">{{ stats.failed }}</div>
+      </div>
+      <div class="game-card stat-card" style="border-color:rgba(245,158,11,0.4);">
+        <div style="font-size:1.8rem;margin-bottom:6px;">💰</div>
+        <div class="game-name">Revenue (Sukses)</div>
+        <div style="font-family:'Orbitron',monospace;font-size:1rem;color:#f59e0b;font-weight:700;">{{ stats.revenue }}</div>
+      </div>
+    </div>
+
+    <!-- Orders Table -->
+    <div style="margin-top:48px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+        <div class="section-title" style="font-size:1.2rem;margin:0;">📦 Semua <span>Pesanan</span></div>
+        <input class="search-input" type="text" id="searchInput" placeholder="🔍 Cari game / user ID..." oninput="filterTable()">
+      </div>
+
+      <!-- Filter tabs -->
+      <div class="admin-filter">
+        <button class="filter-btn active" onclick="setFilter('all', this)">Semua</button>
+        <button class="filter-btn" onclick="setFilter('pending', this)">⏳ Pending</button>
+        <button class="filter-btn" onclick="setFilter('success', this)">✅ Sukses</button>
+        <button class="filter-btn" onclick="setFilter('failed', this)">❌ Gagal</button>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table id="ordersTable" style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(124,58,237,0.3);">
+              <th style="padding:12px 12px;text-align:left;color:#a855f7;font-family:'Rajdhani',sans-serif;">ID</th>
+              <th style="padding:12px 12px;text-align:left;color:#a855f7;font-family:'Rajdhani',sans-serif;">Waktu</th>
+              <th style="padding:12px 12px;text-align:left;color:#a855f7;font-family:'Rajdhani',sans-serif;">Game</th>
+              <th style="padding:12px 12px;text-align:left;color:#a855f7;font-family:'Rajdhani',sans-serif;">User ID</th>
+              <th style="padding:12px 12px;text-align:left;color:#a855f7;font-family:'Rajdhani',sans-serif;">Diamond</th>
+              <th style="padding:12px 12px;text-align:left;color:#a855f7;font-family:'Rajdhani',sans-serif;">Bayar</th>
+              <th style="padding:12px 12px;text-align:left;color:#a855f7;font-family:'Rajdhani',sans-serif;">Total</th>
+              <th style="padding:12px 12px;text-align:left;color:#a855f7;font-family:'Rajdhani',sans-serif;">WA</th>
+              <th style="padding:12px 12px;text-align:left;color:#a855f7;font-family:'Rajdhani',sans-serif;">Status</th>
+              <th style="padding:12px 12px;text-align:left;color:#a855f7;font-family:'Rajdhani',sans-serif;">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            {% for order in orders %}
+            <tr class="order-row" data-status="{{ order.status }}" style="border-bottom:1px solid rgba(255,255,255,0.05);">
+              <td style="padding:10px 12px;color:rgba(255,255,255,0.5);">#{{ order.id }}</td>
+              <td style="padding:10px 12px;color:rgba(255,255,255,0.5);font-size:0.78rem;">{{ order.created_at[:16] if order.created_at else '-' }}</td>
+              <td style="padding:10px 12px;color:#fff;font-weight:600;">{{ order.game }}</td>
+              <td style="padding:10px 12px;color:rgba(255,255,255,0.7);">{{ order.user_id }}{% if order.server_id %}<br><span style="color:rgba(255,255,255,0.4);font-size:0.75rem;">Server: {{ order.server_id }}</span>{% endif %}</td>
+              <td style="padding:10px 12px;color:#67e8f9;">{{ order.diamond }}</td>
+              <td style="padding:10px 12px;color:rgba(255,255,255,0.6);font-size:0.8rem;">{{ order.payment }}</td>
+              <td style="padding:10px 12px;color:#f59e0b;font-weight:700;">{{ order.price }}</td>
+              <td style="padding:10px 12px;">
+                {% if order.whatsapp %}
+                  <a class="wa-link" href="https://wa.me/{{ order.whatsapp | replace('0','62',1) }}?text=Halo%2C+pesanan+kamu+Order+%23{{ order.id }}+sudah+{{ order.status }}!" target="_blank">
+                    📲 {{ order.whatsapp }}
+                  </a>
+                {% else %}
+                  <span style="color:rgba(255,255,255,0.3);font-size:0.78rem;">-</span>
+                {% endif %}
+              </td>
+              <td style="padding:10px 12px;">
+                <span style="padding:3px 10px;border-radius:20px;font-size:0.75rem;font-weight:700;
+                  {% if order.status == 'success' %}background:rgba(34,197,94,0.15);color:#4ade80;
+                  {% elif order.status == 'pending' %}background:rgba(234,179,8,0.15);color:#facc15;
+                  {% else %}background:rgba(239,68,68,0.15);color:#f87171;{% endif %}">
+                  {{ order.status | upper }}
+                </span>
+              </td>
+              <td style="padding:10px 12px;">
+                <form method="POST" action="{{ url_for('admin_update_order', order_id=order.id) }}" style="display:flex;gap:6px;align-items:center;">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                  <select name="status" style="background:#0e0e1e;border:1px solid rgba(124,58,237,0.3);color:#fff;border-radius:6px;padding:4px 8px;font-size:0.8rem;">
+                    <option value="pending" {% if order.status=='pending' %}selected{% endif %}>Pending</option>
+                    <option value="success" {% if order.status=='success' %}selected{% endif %}>Success</option>
+                    <option value="failed"  {% if order.status=='failed'  %}selected{% endif %}>Failed</option>
+                  </select>
+                  <button type="submit" style="background:rgba(124,58,237,0.3);border:none;color:#a855f7;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.8rem;">Update</button>
+                </form>
+              </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="10" style="padding:32px;text-align:center;color:rgba(255,255,255,0.4);">Belum ada pesanan.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+let currentFilter = 'all';
+
+function setFilter(status, btn) {
+  currentFilter = status;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterTable();
+}
+
+function filterTable() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.order-row').forEach(row => {
+    const matchStatus = currentFilter === 'all' || row.dataset.status === currentFilter;
+    const matchSearch = !q || row.textContent.toLowerCase().includes(q);
+    row.style.display = (matchStatus && matchSearch) ? '' : 'none';
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>TrustTop Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Orbitron:wght@700;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- =========== INTRO =========== -->
+<div id="intro">
+  <div id="stars-container"></div>
+
+  <div id="scene-face">
+    <div class="face-glow-ring"></div>
+    <div class="face-container">
+      <svg class="character-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="skinGrad" cx="50%" cy="45%" r="55%">
+            <stop offset="0%" stop-color="#d4956a"/>
+            <stop offset="100%" stop-color="#a0663a"/>
+          </radialGradient>
+          <radialGradient id="capGrad" cx="50%" cy="40%" r="60%">
+            <stop offset="0%" stop-color="#e8e8e8"/>
+            <stop offset="100%" stop-color="#b0b0b0"/>
+          </radialGradient>
+          <filter id="faceShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="rgba(0,0,0,0.5)"/>
+          </filter>
+        </defs>
+        <g class="head-group" filter="url(#faceShadow)">
+          <rect x="82" y="148" width="36" height="22" rx="8" fill="#a0663a"/>
+          <ellipse cx="100" cy="115" rx="58" ry="62" fill="url(#skinGrad)"/>
+          <ellipse cx="44" cy="118" rx="11" ry="13" fill="#c07845"/>
+          <ellipse cx="156" cy="118" rx="11" ry="13" fill="#c07845"/>
+          <ellipse cx="44" cy="118" rx="6" ry="8" fill="#a0663a"/>
+          <ellipse cx="156" cy="118" rx="6" ry="8" fill="#a0663a"/>
+          <path d="M62 95 Q78 88 90 92" stroke="#3d2010" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <path d="M110 92 Q122 88 138 95" stroke="#3d2010" stroke-width="5" stroke-linecap="round" fill="none"/>
+          <ellipse cx="78" cy="108" rx="13" ry="11" fill="#fff"/>
+          <ellipse cx="122" cy="108" rx="13" ry="11" fill="#fff"/>
+          <g class="eye-left">
+            <circle cx="78" cy="109" r="8" fill="#3d2010"/>
+            <circle cx="78" cy="109" r="4.5" fill="#1a0a02"/>
+            <circle cx="80" cy="107" r="2" fill="#fff" opacity="0.9"/>
+          </g>
+          <g class="eye-right">
+            <circle cx="122" cy="109" r="8" fill="#3d2010"/>
+            <circle cx="122" cy="109" r="4.5" fill="#1a0a02"/>
+            <circle cx="124" cy="107" r="2" fill="#fff" opacity="0.9"/>
+          </g>
+          <path d="M96 118 Q100 130 104 118" stroke="#8a4e28" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <ellipse cx="94" cy="128" rx="5" ry="3.5" fill="#8a4e28" opacity="0.5"/>
+          <ellipse cx="106" cy="128" rx="5" ry="3.5" fill="#8a4e28" opacity="0.5"/>
+          <path d="M80 142 Q100 152 120 142" stroke="#7a3d1a" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+          <ellipse cx="62" cy="128" rx="12" ry="8" fill="rgba(220,100,80,0.2)"/>
+          <ellipse cx="138" cy="128" rx="12" ry="8" fill="rgba(220,100,80,0.2)"/>
+          <path d="M30 92 Q100 82 170 92 Q160 100 100 98 Q40 100 30 92Z" fill="#c8c8c8"/>
+          <path d="M44 92 Q100 56 156 92 Q150 60 100 52 Q50 60 44 92Z" fill="url(#capGrad)"/>
+          <ellipse cx="100" cy="92" rx="56" ry="8" fill="#d8d8d8" opacity="0.6"/>
+          <circle cx="100" cy="54" r="5" fill="#bbb"/>
+          <circle cx="100" cy="75" r="4" fill="rgba(124,58,237,0.7)"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div id="scene-diamond">
+    <div class="diamond-wrap">
+      <div class="diamond-sparkle" style="top:-20px;left:30px;animation-delay:0s;"></div>
+      <div class="diamond-sparkle" style="top:10px;right:-10px;animation-delay:0.4s;"></div>
+      <div class="diamond-sparkle" style="bottom:0px;left:-15px;animation-delay:0.8s;"></div>
+      <div class="diamond-sparkle" style="bottom:20px;right:20px;animation-delay:0.2s;"></div>
+      <div class="diamond-sparkle" style="top:40px;left:-30px;animation-delay:1s;width:4px;height:4px;"></div>
+      <svg class="diamond-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="dGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e0f7ff"/>
+            <stop offset="40%" stop-color="#67e8f9"/>
+            <stop offset="100%" stop-color="#0891b2"/>
+          </linearGradient>
+          <linearGradient id="dGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#a5f3fc"/>
+            <stop offset="100%" stop-color="#0e7490"/>
+          </linearGradient>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <g filter="url(#glow)">
+          <polygon points="100,20 160,75 100,180 40,75" fill="url(#dGrad1)" opacity="0.95"/>
+          <polygon points="100,20 160,75 100,75 40,75" fill="#a5f3fc" opacity="0.7"/>
+          <polygon points="40,75 100,75 100,180" fill="url(#dGrad2)" opacity="0.85"/>
+          <polygon points="160,75 100,75 100,180" fill="#67e8f9" opacity="0.6"/>
+          <polygon points="100,20 40,75 100,75" fill="#e0f7ff" opacity="0.5"/>
+          <polygon points="100,20 160,75 100,75" fill="#cffafe" opacity="0.4"/>
+          <polygon points="100,28 148,72 110,72" fill="#fff" opacity="0.3"/>
+          <line x1="100" y1="20" x2="100" y2="180" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+          <line x1="40" y1="75" x2="160" y2="75" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div id="scene-text1">
+    <div class="big-text">Welcome to<br>TrustTop Up</div>
+    <div class="text-glow-line"></div>
+  </div>
+
+  <div id="scene-text2">
+    <div class="big-text" style="font-size:clamp(1.4rem,4vw,2.2rem); line-height:1.3;">TrustTop Up</div>
+    <div class="text-glow-line"></div>
+    <div class="sub-text">
+      TrustTop Up provides cheap and reliable top up services.<br><br>
+      Don't forget to give a <strong style="color:#f59e0b;">rating/review</strong>.<br><br>
+      If you want to donate, go to the <strong style="color:#a855f7;">three dots ⋮</strong> in the top left corner and look for <strong style="color:#f59e0b;">"Donate"</strong>.<br><br>
+      <em style="color:rgba(255,255,255,0.5);">Your donations are valuable for us to develop this website.</em>
+    </div>
+  </div>
+</div>
+
+<!-- =========== MAIN WEBSITE =========== -->
+<div id="main-site">
+
+  <nav>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="nav-dots-btn" id="dotsBtn" onclick="toggleMenu()">⋮</button>
+      <div class="dots-menu" id="dotsMenu">
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('game') }}">Games</a>
+        <a href="#">Review</a>
+        <a href="#">Contact</a>
+        <div class="dots-menu-divider"></div>
+        <a href="{{ url_for('status') }}">Status Pesanan</a>
+        <a href="{{ url_for('riwayat') }}">Riwayat</a>
+        <div class="dots-menu-divider"></div>
+        <a href="{{ url_for('login') }}">Login</a>
+        <div class="dots-menu-divider"></div>
+        <a href="#" class="donate-link" onclick="openDonate(event)">Donate</a>
+      </div>
+    </div>
+    <div class="nav-logo">TrustTop Up</div>
+    <ul class="nav-links">
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('game') }}">Games</a></li>
+      <li><a href="#">Review</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <svg class="hero-diamond" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hd1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#e0f7ff"/>
+          <stop offset="100%" stop-color="#0891b2"/>
+        </linearGradient>
+      </defs>
+      <polygon points="100,20 160,75 100,180 40,75" fill="url(#hd1)" opacity="0.95"/>
+      <polygon points="100,20 160,75 100,75 40,75" fill="#a5f3fc" opacity="0.7"/>
+      <polygon points="40,75 100,75 100,180" fill="#0e7490" opacity="0.85"/>
+      <polygon points="100,20 40,75 100,75" fill="#e0f7ff" opacity="0.5"/>
+      <polygon points="100,28 148,72 110,72" fill="#fff" opacity="0.3"/>
+    </svg>
+    <h1 class="hero-title">TrustTop Up</h1>
+    <p class="hero-sub">Top up game murah, cepat, dan terpercaya. Dapatkan diamond favoritmu sekarang!</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="scrollToGames()">Top Up Sekarang</button>
+      <button class="btn-secondary" onclick="openDonate(event)"> Donate</button>
+    </div>
+  </section>
+
+  <section class="section" id="games-section">
+    <div class="section-title">Pilih <span>Game</span></div>
+    <div class="section-sub">Top up game favoritmu dengan harga terbaik</div>
+    <div class="games-grid">
+      {% for game in games %}
+      <div class="game-card" onclick="openModal('{{ game.name }}')">
+        {% if game.badge %}<div class="popular-badge">{{ game.badge }}</div>{% endif %}
+        <img src="{{ url_for('static', filename='game/' + game.image) }}" alt="{{ game.name }}" class="game-img" onerror="this.style.display='none'">
+        <div class="game-name">{{ game.name }}</div>
+        <div class="game-price">Mulai {{ game.price }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section" style="background:rgba(124,58,237,0.04);border-radius:24px;">
+    <div class="section-title"> <span>Review</span> Pelanggan</div>
+    <div class="section-sub">Apa kata mereka tentang TrustTop Up?</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;">
+      <div class="game-card" style="text-align:left;cursor:default;">
+        <div style="color:#f59e0b;font-size:1.1rem;margin-bottom:8px;"></div>
+        <div style="font-size:0.95rem;color:rgba(255,255,255,0.8);line-height:1.6;">"Top up cepet banget! Diamond langsung masuk dalam 1 menit. Recommended!"</div>
+        <div style="margin-top:12px;color:#a855f7;font-size:0.85rem;font-weight:700;">— Arya R.</div>
+      </div>
+      <div class="game-card" style="text-align:left;cursor:default;">
+        <div style="color:#f59e0b;font-size:1.1rem;margin-bottom:8px;"></div>
+        <div style="font-size:0.95rem;color:rgba(255,255,255,0.8);line-height:1.6;">"Harga paling murah se-Indonesia wkwk, udah langganan sini dari setahun lalu!"</div>
+        <div style="margin-top:12px;color:#a855f7;font-size:0.85rem;font-weight:700;">— Bunga S.</div>
+      </div>
+      <div class="game-card" style="text-align:left;cursor:default;">
+        <div style="color:#f59e0b;font-size:1.1rem;margin-bottom:8px;"></div>
+        <div style="font-size:0.95rem;color:rgba(255,255,255,0.8);line-height:1.6;">"Pelayanan ramah, harga murah, proses cepat. Top banget deh TrustTop Up!"</div>
+        <div style="margin-top:12px;color:#a855f7;font-size:0.85rem;font-weight:700;">— Dito P.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div style="font-family:'Orbitron',monospace;font-size:1rem;font-weight:700;margin-bottom:8px;">
+      <span>TrustTop Up</span>
+    </div>
+    <div>Top up murah, cepat, dan terpercaya </div>
+    <div style="margin-top:8px;font-size:0.8rem;">© 2026 TrustTop Up. All rights reserved.</div>
+  </footer>
+</div>
+
+<!-- TOP UP MODAL -->
+<div class="modal-overlay" id="topup-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()"></button>
+    <div class="modal-title">Top Up </div>
+    <div class="modal-game-name" id="modal-game-name">Mobile Legends</div>
+
+    <!-- Label user id dinamis per game -->
+    <label id="label-user-id">User ID</label>
+    <input type="text" id="user-id"/>
+
+    <!-- Server ID: hanya muncul untuk ML & Genshin & Honkai -->
+    <div id="server-id-wrapper" style="display:none;">
+      <label id="label-server-id">Server ID</label>
+      <input type="text" id="server-id"/>
+    </div>
+
+    <!-- Server dropdown: untuk Genshin & Honkai -->
+    <div id="server-select-wrapper" style="display:none;">
+      <label>Server</label>
+      <select id="server-select">
+        <option value="Asia">Asia</option>
+        <option value="America">America</option>
+        <option value="Europe">Europe</option>
+        <option value="TW_HK_MO">TW/HK/MO</option>
+      </select>
+    </div>
+
+    <label>Pilih Jumlah Diamond</label>
+    <div class="diamond-amounts" id="diamond-amounts"></div>
+    <label>Metode Pembayaran</label>
+    <select id="payment-method">
+      <option>Dana</option>
+      <option>GoPay</option>
+      <option>OVO</option>
+      <option>ShopeePay</option>
+      <option>Bank Transfer (BCA)</option>
+      <option>Indomaret / Alfamart</option>
+    </select>
+    <button class="btn-topup" onclick="processTopup()"> PROSES TOP UP</button>
+  </div>
+</div>
+
+<!-- DONATE MODAL -->
+<div class="modal-overlay" id="donate-modal">
+  <div class="modal" style="text-align:center;">
+    <button class="modal-close" onclick="closeDonate()"></button>
+    <div class="donate-icon">
+      <svg width="64" height="64" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block;margin:0 auto;">
+        <rect x="1" y="2" width="2" height="2" fill="#f59e0b"/>
+        <rect x="3" y="1" width="3" height="2" fill="#f59e0b"/>
+        <rect x="10" y="1" width="3" height="2" fill="#f59e0b"/>
+        <rect x="6" y="1" width="4" height="1" fill="#f59e0b"/>
+        <rect x="13" y="2" width="2" height="2" fill="#f59e0b"/>
+        <rect x="1" y="4" width="14" height="3" fill="#f59e0b"/>
+        <rect x="2" y="7" width="12" height="2" fill="#f59e0b"/>
+        <rect x="3" y="9" width="10" height="2" fill="#f59e0b"/>
+        <rect x="4" y="11" width="8" height="2" fill="#f59e0b"/>
+        <rect x="5" y="13" width="6" height="1" fill="#f59e0b"/>
+        <rect x="6" y="14" width="4" height="1" fill="#f59e0b"/>
+        <rect x="7" y="15" width="2" height="1" fill="#f59e0b"/>
+        <!-- highlight -->
+        <rect x="3" y="2" width="2" height="1" fill="#fde68a"/>
+        <rect x="2" y="3" width="3" height="1" fill="#fde68a"/>
+        <rect x="2" y="4" width="2" height="1" fill="#fde68a"/>
+      </svg>
+    </div>
+    <div class="modal-title">Donate</div>
+    <div style="color:rgba(255,255,255,0.6);font-size:0.9rem;margin-top:8px;line-height:1.7;">
+      Donasi kamu sangat berarti bagi kami untuk terus mengembangkan website ini. Terima kasih!
+    </div>
+    <div class="donate-code">Dana / GoPay / OVO<br><br>0812-3456-7890<br><span style="font-size:0.85rem;opacity:0.7;">a.n. TrustTop Up</span></div>
+    <div style="color:rgba(255,255,255,0.45);font-size:0.8rem;">Setelah transfer, konfirmasi via WhatsApp ya!</div>
+    <button class="btn-primary" style="margin-top:20px;width:100%;border-radius:12px;" onclick="closeDonate()">Tutup</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"> Top Up berhasil diproses!</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script src="{{ url_for('static', filename='notif.js') }}"></script>
+</body>
+</html>
